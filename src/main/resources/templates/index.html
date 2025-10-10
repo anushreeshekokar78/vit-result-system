@@ -1,0 +1,517 @@
+<!-- src/main/resources/templates/index.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>VIT Student Result System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .main-header {
+      background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+      color: white;
+      padding: 30px 0;
+      margin-bottom: 30px;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .institute-logo {
+      width: 60px;
+      height: 60px;
+      background: #ffd700;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      border: 3px solid white;
+    }
+    
+    .form-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+    
+    .card-header {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      color: white;
+      padding: 25px;
+      border-bottom: none;
+    }
+    
+    .subject-card {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid #1a237e;
+      transition: all 0.3s ease;
+    }
+    
+    .subject-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .subject-header {
+      background: #e3f2fd;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border-left: 4px solid #2196f3;
+    }
+    
+    .marks-input {
+      border-radius: 8px;
+      border: 2px solid #e9ecef;
+      transition: all 0.3s ease;
+    }
+    
+    .marks-input:focus {
+      border-color: #1a237e;
+      box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25);
+    }
+    
+    .progress-indicator {
+      height: 4px;
+      background: #e9ecef;
+      margin: 10px 0;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4caf50, #8bc34a);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    
+    .info-badge {
+      background: #e3f2fd;
+      color: #1a237e;
+      padding: 10px 15px;
+      border-radius: 8px;
+      font-size: 0.9em;
+      margin-bottom: 20px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(26, 35, 126, 0.4);
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+    
+    .calculation-info {
+      background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+      border: 1px solid #4caf50;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+    
+    .footer {
+      background: #f8f9fa;
+      padding: 20px 0;
+      margin-top: 40px;
+      border-top: 1px solid #dee2e6;
+      text-align: center;
+      color: #6c757d;
+    }
+    
+    .input-group-text {
+      background: #1a237e;
+      color: white;
+      border: none;
+    }
+    
+    .real-time-preview {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body class="bg-light">
+  <!-- Header Section -->
+  <div class="main-header">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-md-8">
+          <div class="d-flex align-items-center">
+            <div class="institute-logo">
+              <i class="fas fa-graduation-cap fa-lg"></i>
+            </div>
+            <div>
+              <h1 class="mb-1">Vishwakarma Institute of Technology</h1>
+              <p class="mb-0 opacity-75">Student Result Management System</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 text-end">
+          <div class="badge bg-warning text-dark p-2">
+            <i class="fas fa-star me-1"></i>
+            Fifth Semester
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Information Card -->
+    <div class="info-badge">
+      <i class="fas fa-info-circle me-2"></i>
+      <strong>Instructions:</strong> Enter marks for all 5 subjects. Each subject has Insem (30 marks) and Endsem (70 marks) components.
+    </div>
+
+    <div class="form-card card">
+      <div class="card-header text-center">
+        <h3 class="mb-2"><i class="fas fa-calculator me-2"></i>Student Marks Entry Form</h3>
+        <p class="mb-0 opacity-75">Fill in the details below to generate the result certificate</p>
+      </div>
+      
+      <div class="card-body p-4">
+        <form th:action="@{/calculate}" th:object="${studentResult}" method="post" id="marksForm">
+          <!-- Student Information -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="subject-card">
+                <div class="subject-header">
+                  <h5 class="mb-0"><i class="fas fa-user-graduate me-2"></i>Student Information</h5>
+                </div>
+                <div class="row">
+                  <div class="col-md-8">
+                    <label class="form-label fw-bold">Full Name</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-user"></i></span>
+                      <input type="text" th:field="*{studentName}" class="form-control marks-input" 
+                             placeholder="Enter student's full name" required>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold">Roll Number</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                      <input type="text" class="form-control marks-input" placeholder="Optional">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subject 1 -->
+          <div class="subject-card">
+            <div class="subject-header">
+              <h5 class="mb-0"><i class="fas fa-laptop-code me-2"></i>Subject 1: Computer Networks (CSE301)</h5>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Insem Marks (0-30)</label>
+                <div class="input-group">
+                  <span class="input-group-text">INSEM</span>
+                  <input type="number" th:field="*{sub1Insem}" class="form-control marks-input insem-marks" 
+                         min="0" max="30" placeholder="0-30" required oninput="updateProgress()">
+                </div>
+                <small class="text-muted">Mid-Semester Examination (30%)</small>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Endsem Marks (0-70)</label>
+                <div class="input-group">
+                  <span class="input-group-text">ENDSEM</span>
+                  <input type="number" th:field="*{sub1Endsem}" class="form-control marks-input endsem-marks" 
+                         min="0" max="70" placeholder="0-70" required oninput="updateProgress()">
+                </div>
+                <small class="text-muted">End-Semester Examination (70%)</small>
+              </div>
+            </div>
+            <div class="progress-indicator">
+              <div class="progress-fill" id="progress1"></div>
+            </div>
+            <div class="text-center">
+              <small id="subject1Total" class="text-muted">Subject Total: 0/100</small>
+            </div>
+          </div>
+
+          <!-- Subject 2 -->
+          <div class="subject-card">
+            <div class="subject-header">
+              <h5 class="mb-0"><i class="fas fa-database me-2"></i>Subject 2: Database Systems (CSE302)</h5>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Insem Marks (0-30)</label>
+                <div class="input-group">
+                  <span class="input-group-text">INSEM</span>
+                  <input type="number" th:field="*{sub2Insem}" class="form-control marks-input insem-marks" 
+                         min="0" max="30" placeholder="0-30" required oninput="updateProgress()">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Endsem Marks (0-70)</label>
+                <div class="input-group">
+                  <span class="input-group-text">ENDSEM</span>
+                  <input type="number" th:field="*{sub2Endsem}" class="form-control marks-input endsem-marks" 
+                         min="0" max="70" placeholder="0-70" required oninput="updateProgress()">
+                </div>
+              </div>
+            </div>
+            <div class="progress-indicator">
+              <div class="progress-fill" id="progress2"></div>
+            </div>
+            <div class="text-center">
+              <small id="subject2Total" class="text-muted">Subject Total: 0/100</small>
+            </div>
+          </div>
+
+          <!-- Subject 3 -->
+          <div class="subject-card">
+            <div class="subject-header">
+              <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Subject 3: Software Engineering (CSE303)</h5>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Insem Marks (0-30)</label>
+                <div class="input-group">
+                  <span class="input-group-text">INSEM</span>
+                  <input type="number" th:field="*{sub3Insem}" class="form-control marks-input insem-marks" 
+                         min="0" max="30" placeholder="0-30" required oninput="updateProgress()">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Endsem Marks (0-70)</label>
+                <div class="input-group">
+                  <span class="input-group-text">ENDSEM</span>
+                  <input type="number" th:field="*{sub3Endsem}" class="form-control marks-input endsem-marks" 
+                         min="0" max="70" placeholder="0-70" required oninput="updateProgress()">
+                </div>
+              </div>
+            </div>
+            <div class="progress-indicator">
+              <div class="progress-fill" id="progress3"></div>
+            </div>
+            <div class="text-center">
+              <small id="subject3Total" class="text-muted">Subject Total: 0/100</small>
+            </div>
+          </div>
+
+          <!-- Subject 4 -->
+          <div class="subject-card">
+            <div class="subject-header">
+              <h5 class="mb-0"><i class="fas fa-code me-2"></i>Subject 4: Web Technologies (CSE304)</h5>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Insem Marks (0-30)</label>
+                <div class="input-group">
+                  <span class="input-group-text">INSEM</span>
+                  <input type="number" th:field="*{sub4Insem}" class="form-control marks-input insem-marks" 
+                         min="0" max="30" placeholder="0-30" required oninput="updateProgress()">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Endsem Marks (0-70)</label>
+                <div class="input-group">
+                  <span class="input-group-text">ENDSEM</span>
+                  <input type="number" th:field="*{sub4Endsem}" class="form-control marks-input endsem-marks" 
+                         min="0" max="70" placeholder="0-70" required oninput="updateProgress()">
+                </div>
+              </div>
+            </div>
+            <div class="progress-indicator">
+              <div class="progress-fill" id="progress4"></div>
+            </div>
+            <div class="text-center">
+              <small id="subject4Total" class="text-muted">Subject Total: 0/100</small>
+            </div>
+          </div>
+
+          <!-- Subject 5 -->
+          <div class="subject-card">
+            <div class="subject-header">
+              <h5 class="mb-0"><i class="fas fa-desktop me-2"></i>Subject 5: Operating Systems (CSE305)</h5>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Insem Marks (0-30)</label>
+                <div class="input-group">
+                  <span class="input-group-text">INSEM</span>
+                  <input type="number" th:field="*{sub5Insem}" class="form-control marks-input insem-marks" 
+                         min="0" max="30" placeholder="0-30" required oninput="updateProgress()">
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Endsem Marks (0-70)</label>
+                <div class="input-group">
+                  <span class="input-group-text">ENDSEM</span>
+                  <input type="number" th:field="*{sub5Endsem}" class="form-control marks-input endsem-marks" 
+                         min="0" max="70" placeholder="0-70" required oninput="updateProgress()">
+                </div>
+              </div>
+            </div>
+            <div class="progress-indicator">
+              <div class="progress-fill" id="progress5"></div>
+            </div>
+            <div class="text-center">
+              <small id="subject5Total" class="text-muted">Subject Total: 0/100</small>
+            </div>
+          </div>
+
+          <!-- Real-time Preview -->
+          <div class="real-time-preview">
+            <h6><i class="fas fa-chart-line me-2"></i>Real-time Calculation Preview</h6>
+            <div class="row text-center">
+              <div class="col-md-4">
+                <div class="fw-bold text-primary" id="previewTotal">Total: 0/500</div>
+              </div>
+              <div class="col-md-4">
+                <div class="fw-bold text-success" id="previewPercentage">Percentage: 0%</div>
+              </div>
+              <div class="col-md-4">
+                <div class="fw-bold text-info" id="previewCGPA">CGPA: 0.00</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="mt-4 text-center">
+            <button type="submit" class="btn btn-primary btn-lg me-3">
+              <i class="fas fa-certificate me-2"></i>Generate Certificate
+            </button>
+            <button type="reset" class="btn btn-secondary btn-lg me-3" onclick="resetForm()">
+              <i class="fas fa-redo me-2"></i>Reset Form
+            </button>
+            <button type="button" class="btn btn-outline-info btn-lg" onclick="fillSampleData()">
+              <i class="fas fa-magic me-2"></i>Fill Sample Data
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Calculation Information -->
+    <div class="calculation-info">
+      <h6><i class="fas fa-calculator me-2"></i>Calculation Formula</h6>
+      <div class="row">
+        <div class="col-md-4">
+          <strong>Total Marks:</strong> Sum of all 5 subjects (each out of 100)
+        </div>
+        <div class="col-md-4">
+          <strong>Percentage:</strong> (Total Marks ÷ 500) × 100
+        </div>
+        <div class="col-md-4">
+          <strong>CGPA:</strong> Percentage ÷ 9.5
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="container">
+      <p class="mb-0">
+        <i class="fas fa-graduation-cap me-2"></i>
+        Vellore Institute of Technology - Computer Science Department
+      </p>
+      <small>© 2024 VIT Result Management System | Fifth Semester B.Tech Program</small>
+    </div>
+  </div>
+
+  <script>
+    function updateProgress() {
+      let totalMarks = 0;
+      
+      for (let i = 1; i <= 5; i++) {
+        const insem = parseInt(document.querySelector(`*[th\\:field="*{sub${i}Insem}"]`).value) || 0;
+        const endsem = parseInt(document.querySelector(`*[th\\:field="*{sub${i}Endsem}"]`).value) || 0;
+        const subjectTotal = insem + endsem;
+        
+        // Update progress bar
+        const progressBar = document.getElementById(`progress${i}`);
+        progressBar.style.width = `${subjectTotal}%`;
+        
+        // Update progress bar color based on performance
+        if (subjectTotal >= 60) progressBar.style.background = 'linear-gradient(90deg, #4caf50, #8bc34a)';
+        else if (subjectTotal >= 40) progressBar.style.background = 'linear-gradient(90deg, #ff9800, #ffc107)';
+        else progressBar.style.background = 'linear-gradient(90deg, #f44336, #e57373)';
+        
+        // Update subject total display
+        document.getElementById(`subject${i}Total`).textContent = `Subject Total: ${subjectTotal}/100`;
+        document.getElementById(`subject${i}Total`).className = `text-${subjectTotal >= 40 ? 'success' : 'danger'} fw-bold`;
+        
+        totalMarks += subjectTotal;
+      }
+      
+      // Update preview
+      const percentage = (totalMarks / 5).toFixed(2);
+      const cgpa = (percentage / 9.5).toFixed(2);
+      
+      document.getElementById('previewTotal').textContent = `Total: ${totalMarks}/500`;
+      document.getElementById('previewPercentage').textContent = `Percentage: ${percentage}%`;
+      document.getElementById('previewCGPA').textContent = `CGPA: ${cgpa}`;
+    }
+    
+    function resetForm() {
+      // Reset all progress bars and preview
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById(`progress${i}`).style.width = '0%';
+        document.getElementById(`subject${i}Total`).textContent = `Subject Total: 0/100`;
+        document.getElementById(`subject${i}Total`).className = 'text-muted';
+      }
+      
+      document.getElementById('previewTotal').textContent = 'Total: 0/500';
+      document.getElementById('previewPercentage').textContent = 'Percentage: 0%';
+      document.getElementById('previewCGPA').textContent = 'CGPA: 0.00';
+    }
+    
+    function fillSampleData() {
+      const sampleData = {
+        studentName: 'Rajesh Kumar',
+        sub1Insem: 25, sub1Endsem: 65,
+        sub2Insem: 28, sub2Endsem: 62,
+        sub3Insem: 22, sub3Endsem: 58,
+        sub4Insem: 26, sub4Endsem: 64,
+        sub5Insem: 24, sub5Endsem: 66
+      };
+      
+      // Fill form with sample data
+      document.querySelector('*[th\\:field="*{studentName}"]').value = sampleData.studentName;
+      
+      for (let i = 1; i <= 5; i++) {
+        document.querySelector(`*[th\\:field="*{sub${i}Insem}"]`).value = sampleData[`sub${i}Insem`];
+        document.querySelector(`*[th\\:field="*{sub${i}Endsem}"]`).value = sampleData[`sub${i}Endsem`];
+      }
+      
+      updateProgress();
+    }
+    
+    // Initialize progress bars on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      updateProgress();
+    });
+  </script>
+</body>
+</html>
