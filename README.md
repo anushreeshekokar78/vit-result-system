@@ -23,6 +23,7 @@ A responsive web application built with Spring Boot to calculate and manage seme
 - Java 17 or higher
 - Maven 3.6+
 - MySQL 8.0+ (or use embedded H2)
+- local host http://localhost:8080/
 
 ## 🏃‍♂ Quick Start
 
